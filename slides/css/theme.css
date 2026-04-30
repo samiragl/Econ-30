@@ -1,0 +1,54 @@
+/* TA deck — readability + Stanford-adjacent accent (Reveal 4 variables) */
+:root {
+  --r-main-color: #1a1a1a;
+  --r-heading-color: #8c1515;
+  --r-link-color: #8c1515;
+  --r-link-color-hover: #5c0e0e;
+  --r-background-color: #ffffff;
+  --r-heading-font: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --r-main-font: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --r-heading-text-transform: none;
+  --r-heading-text-shadow: none;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  font-weight: 700;
+}
+
+.reveal h1 {
+  border-bottom: 3px solid var(--r-heading-color);
+  padding-bottom: 0.25em;
+}
+
+.reveal pre {
+  font-size: 0.45em;
+  line-height: 1.35;
+  width: 100%;
+  box-shadow: none;
+}
+
+.reveal table {
+  font-size: 0.55em;
+  margin: 0.5em auto;
+}
+
+.reveal table th,
+.reveal table td {
+  padding: 0.35em 0.5em;
+}
+
+.reveal .subtitle {
+  color: #444;
+  font-size: 0.85em;
+}
+
+.reveal .small {
+  font-size: 0.65em;
+  color: #555;
+}
+
+.reveal ul {
+  text-align: left;
+}

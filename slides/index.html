@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Econ 30 Lab Prep — HTML, Cursor, Vercel</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css" id="theme" />
+  <link rel="stylesheet" href="css/theme.css" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section>
+        <h1>Preparing the web capstone assignment</h1>
+        <p class="subtitle">HTML page · Cursor (including Plan Mode) · Vercel hosting</p>
+        <p>Stanford <strong>Econ 30</strong> — Lab prep for teaching assistants.</p>
+        <p class="small">Reveal deck: <code>slides/index.html</code> · Print: add <code>?print-pdf</code> then browser Print → PDF</p>
+        <aside class="notes">Welcome; goals = assignment clarity + AI workflow + one deploy path.</aside>
+      </section>
+
+      <section>
+        <h1>Why this assignment</h1>
+        <p><strong>One public URL</strong> — anyone can open the project without extra software.</p>
+        <ul>
+          <li>Explain <strong>context</strong>, <strong>literature</strong>, and a clear <strong>research question</strong>.</li>
+          <li>Package work for non-specialist readers.</li>
+          <li>Practice <strong>publish</strong>: local file → hosted page.</li>
+        </ul>
+        <aside class="notes">Tie to economics communication: question, evidence, accessible summary.</aside>
+      </section>
+
+      <section>
+        <h1>What students turn in</h1>
+        <h3>1. <code>index.html</code></h3>
+        <ul>
+          <li><strong>Project title</strong> and <strong>student name</strong></li>
+          <li><strong>Description:</strong> context, literature, research question</li>
+          <li><strong>One interactive element</strong> — placeholder or figure OK</li>
+        </ul>
+        <h3>2. Live link</h3>
+        <p>Hosted on <strong>Vercel</strong>, public. <strong>Cursor</strong> allowed; <strong>Plan Mode</strong> recommended.</p>
+        <aside class="notes">One slide they can screenshot as the checklist anchor.</aside>
+      </section>
+
+      <section>
+        <h1>What HTML is (one minute)</h1>
+        <p><strong>HTML</strong> = structure + content.</p>
+        <ul>
+          <li><strong>Structure:</strong> <code>html</code>, <code>head</code>, <code>body</code>, headings, <code>section</code>, <code>p</code></li>
+          <li><strong>Media:</strong> <code>img</code>, <code>a</code> to papers or data</li>
+          <li><strong>Interactive (assignment):</strong> collapsible, button, form, chart placeholder…</li>
+        </ul>
+        <p class="small">Not a full web course — map ideas to <em>their</em> page sections.</p>
+      </section>
+
+      <section>
+        <h1>Minimum viable layout</h1>
+        <pre><code>[ Project title + name ]
+[ Context / motivation     ]
+[ Literature (short)       ]
+[ Research question        ]
+[ Interactive / figure     ]
+[ Optional: links, footer  ]</code></pre>
+        <p>Tags: <code>h1</code>–<code>h3</code>, <code>p</code>, <code>section</code>, <code>figure</code>, <code>img</code>, <code>a</code>, <code>details</code>/<code>summary</code>, <code>button</code></p>
+      </section>
+
+      <section>
+        <h1>Interactive element (keep it small)</h1>
+        <ul>
+          <li><code>details</code> / <code>summary</code> — expandable methods or data</li>
+          <li><strong>Placeholder</strong> — “Chart here” in <code>figure</code> or bordered <code>div</code></li>
+          <li><strong>Simple form</strong> — static HTML; no server for this HW</li>
+          <li>Optional: tiny JS demo if you choose to show it</li>
+        </ul>
+        <p><strong>Placeholder satisfies the requirement</strong> if the real interaction is not ready.</p>
+      </section>
+
+      <section>
+        <h1>Working with Cursor</h1>
+        <p class="subtitle">Sketch → describe → build → check → deploy</p>
+        <ol>
+          <li>Sketch section order</li>
+          <li>Prompt: <strong>content</strong> + <strong>design</strong></li>
+          <li>Review Cursor output</li>
+          <li>Open <code>index.html</code> locally</li>
+          <li>Deploy on Vercel</li>
+        </ol>
+        <pre><code>You → Cursor (plan + code) → You (review + test) → Vercel</code></pre>
+      </section>
+
+      <section>
+        <h1>Plan Mode</h1>
+        <p><strong>When:</strong> first HTML + deploy; multiple steps at once.</p>
+        <p><strong>Example ask:</strong></p>
+        <pre><code>Break into steps: (1) semantic HTML skeleton,
+(2) simple CSS for readability,
+(3) one interactive placeholder,
+(4) checklist for static deploy on Vercel.</code></pre>
+        <aside class="notes">Students execute step-by-step vs one vague “make my website.”</aside>
+      </section>
+
+      <section>
+        <h1>Prompts: weak vs strong</h1>
+        <p><strong>Weak:</strong> “Make my website for my capstone.”</p>
+        <p class="small">No sections, audience, design, or file plan.</p>
+        <p><strong>Stronger shape:</strong></p>
+        <pre><code>Create a single-file index.html for my economics capstone.
+Sections: title + name; motivation; 3–5 sentence lit summary;
+research question emphasized; one details/summary block.
+Design: academic, max-width ~720px, system fonts, whitespace.</code></pre>
+      </section>
+
+      <section>
+        <h1>What students should paste</h1>
+        <ul>
+          <li><strong>Content:</strong> title, name, context, references, precise RQ</li>
+          <li><strong>Design:</strong> columns, colors, tone, image paths if any</li>
+          <li><strong>Tech:</strong> single file vs folder — match deploy instructions</li>
+        </ul>
+        <p><strong>TA tip:</strong> outline + design in the <em>same</em> first message.</p>
+      </section>
+
+      <section>
+        <h1>Before Vercel: local check</h1>
+        <ul>
+          <li><strong>Static site</strong> — no server code required for this assignment</li>
+          <li>Open <code>index.html</code> in the browser</li>
+          <li>Fix image paths (relative to the HTML file)</li>
+          <li>Prefer lowercase <code>index.html</code> at deploy root</li>
+        </ul>
+        <p>If it fails locally, hosting will not fix it.</p>
+      </section>
+
+      <section>
+        <h1>Hosting on Vercel</h1>
+        <p><strong>Goal:</strong> production URL anyone can load.</p>
+        <h3>Primary path — Git + Vercel</h3>
+        <ol>
+          <li>Push project to GitHub</li>
+          <li>Vercel → New Project → Import repository</li>
+          <li>Framework: <strong>Other</strong> / static if prompted</li>
+          <li>Root must contain <code>index.html</code> (or set subdirectory)</li>
+        </ol>
+        <p class="small">Teach <strong>one</strong> path in lecture; document alternates in course docs if needed.</p>
+      </section>
+
+      <section>
+        <h1>Common pitfalls</h1>
+        <table>
+          <thead><tr><th>Issue</th><th>Check</th></tr></thead>
+          <tbody>
+            <tr><td>Blank / wrong site</td><td>Root folder; <code>index.html</code> present and named correctly</td></tr>
+            <tr><td>Broken images</td><td>Relative paths from HTML location</td></tr>
+            <tr><td>Stale live site</td><td>Push + redeploy after edits</td></tr>
+            <tr><td>Over-scoping</td><td>Static page + one interactive or placeholder</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h1>TA demo &amp; optional co-build</h1>
+        <ul>
+          <li><strong>Recording or live (2–3 min):</strong> mirror student steps once</li>
+          <li><strong>Co-build (10–20 min):</strong> one <em>toy</em> page — not 30 capstones</li>
+          <li>Scripted prompt prepared in advance (<code>docs/live-cobuild-prompt.md</code>)</li>
+          <li><strong>Fallback:</strong> prerecorded clip + known-good URL if Vercel/login fails</li>
+        </ul>
+      </section>
+
+      <section>
+        <h1>Worksheet — “My initial prompt”</h1>
+        <ul>
+          <li><strong>Content I will include:</strong> ___</li>
+          <li><strong>Design (layout, fonts, colors, tone):</strong> ___</li>
+          <li><strong>Plan Mode steps:</strong> (1) ___ (2) ___ (3) ___</li>
+        </ul>
+      </section>
+
+      <section>
+        <h1>Summary &amp; office hours</h1>
+        <p><strong>Checklist</strong></p>
+        <ul>
+          <li><code>index.html</code>: title, name, description, interactive or placeholder</li>
+          <li>Tested locally</li>
+          <li>Public URL submitted</li>
+        </ul>
+        <p><strong>OH prompts:</strong> “Paste your Cursor plan.” · “Paste Vercel build log.” · “URL on phone / incognito?”</p>
+        <aside class="notes">End; point to full script: docs/vercel-walkthrough-script.md</aside>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/notes/notes.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: "c/t",
+      transition: "slide",
+      width: 1100,
+      height: 700,
+      margin: 0.08,
+      plugins: typeof RevealNotes !== "undefined" ? [RevealNotes] : [],
+    });
+  </script>
+</body>
+</html>

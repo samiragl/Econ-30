@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI and the Online Health Information Market</title>
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --surface: #ffffff;
+      --text: #1f2933;
+      --muted: #52606d;
+      --line: #d9e2ec;
+      --accent: #334e68;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Georgia", "Times New Roman", serif;
+      line-height: 1.65;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2.5rem auto;
+      padding: 0 1.25rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 2rem;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    h1, h2 {
+      color: var(--accent);
+      margin: 0 0 0.75rem;
+      line-height: 1.3;
+    }
+
+    h1 {
+      font-size: 1.95rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin-top: 2rem;
+    }
+
+    .author {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    p {
+      margin: 0.75rem 0;
+    }
+
+    ul {
+      margin: 0.75rem 0;
+      padding-left: 1.25rem;
+    }
+
+    li {
+      margin: 0.4rem 0;
+    }
+
+    details {
+      margin-top: 1.25rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.75rem 0.9rem;
+      background: #fbfcfe;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    figure {
+      margin: 1rem 0 0.5rem;
+    }
+
+    .plot-image {
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      display: block;
+    }
+
+    figcaption {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
+    .slideshow-wrap {
+      margin-top: 1rem;
+      perspective: 950px;
+    }
+
+    .slideshow-controls {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      margin: 0.75rem 0 0.9rem;
+    }
+
+    .slideshow-btn {
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .slideshow-btn:hover {
+      background: #f2f6fa;
+    }
+
+    .slideshow-3d {
+      width: 100%;
+      max-width: 540px;
+      margin: 0 auto;
+      min-height: 190px;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
+    .slide {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 78%;
+      min-height: 180px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-weight: 600;
+      color: #102a43;
+      padding: 0.8rem;
+      background: linear-gradient(140deg, #f0f4f8, #d9e2ec);
+      box-shadow: 0 10px 22px rgba(16, 42, 67, 0.15);
+      transition: transform 0.45s ease, opacity 0.45s ease, filter 0.45s ease;
+    }
+
+    .slide-pos-center {
+      transform: translateX(-50%) translateZ(40px) rotateY(0deg) scale(1);
+      opacity: 1;
+      z-index: 3;
+    }
+
+    .slide-pos-left {
+      transform: translateX(-115%) translateZ(0) rotateY(32deg) scale(0.9);
+      opacity: 0.72;
+      z-index: 2;
+      filter: saturate(0.8);
+    }
+
+    .slide-pos-right {
+      transform: translateX(15%) translateZ(0) rotateY(-32deg) scale(0.9);
+      opacity: 0.72;
+      z-index: 2;
+      filter: saturate(0.8);
+    }
+
+    .slide-pos-hidden {
+      transform: translateX(-50%) translateZ(-100px) scale(0.82);
+      opacity: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .slide-two {
+      background: linear-gradient(140deg, #e9f2ff, #c6d7eb);
+    }
+
+    .slide-three {
+      background: linear-gradient(140deg, #eef5ec, #c9dfcc);
+    }
+
+    .slide-label {
+      font-size: 0.88rem;
+      color: #334e68;
+      display: block;
+      margin-top: 0.35rem;
+      font-weight: 500;
+    }
+
+    footer {
+      margin-top: 2rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+      border-top: 1px solid var(--line);
+      padding-top: 1rem;
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        padding: 1.4rem;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <main class="card">
+      <header>
+        <h1>AI and the Online Health Information Market</h1>
+        <p class="author">Samira Gholami</p>
+      </header>
+
+      <section aria-labelledby="project-description">
+        <h2 id="project-description">Project Description and Context</h2>
+        <p>
+          This project studies how generative AI is changing the online health information ecosystem.
+          As more users turn to AI tools for direct health answers, traditional health websites may lose
+          visits and ad revenue. Because medically reviewed content is costly to produce and maintain,
+          this shift raises concerns about long-run incentives to provide reliable public-facing information.
+        </p>
+      </section>
+
+      <section aria-labelledby="literature-summary">
+        <h2 id="literature-summary">Short Literature Summary</h2>
+        <ul>
+          <li>
+            <strong>Health Information and AI Adoption:</strong> prior work examines quality, trust, and
+            user behavior when people rely on AI versus conventional health sources.
+          </li>
+          <li>
+            <strong>AI as a Digital Intermediary:</strong> recent studies analyze whether AI substitutes for
+            search and changes how users reach online information.
+          </li>
+          <li>
+            <strong>Supply-Side Sustainability:</strong> emerging evidence highlights risks to publisher
+            incentives from traffic erosion and AI content extraction.
+          </li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="research-question">
+        <h2 id="research-question">Research Question</h2>
+        <p>
+          How does AI reshape the online health information market on both the demand side
+          (user browsing and substitution behavior) and the supply side (website traffic, crawler
+          blocking, and content strategy)?
+        </p>
+      </section>
+
+      <section aria-labelledby="event-study-plot">
+        <h2 id="event-study-plot">Event Study Plot: Effect of Blocking on Traffic</h2>
+        <figure>
+          <img
+            id="event-study-image"
+            class="plot-image"
+            src="blocking-event-study.png"
+            onerror="if(!this.dataset.e1){this.dataset.e1='1';this.src='assets/blocking-event-study.png';}else if(!this.dataset.e2){this.dataset.e2='1';this.src='./assets/blocking-event-study.png';}else if(!this.dataset.e3){this.dataset.e3='1';this.src='../assets/blocking-event-study.png';}"
+            alt="Event study plot comparing Callaway-Sant'Anna and TWFE estimates around first AI-crawler blocking week.">
+          <figcaption>Estimated ATT (log weekly visits) around the first week of AI-crawler blocking.</figcaption>
+        </figure>
+        <p>
+          This figure shows a broadly negative post-blocking pattern in traffic across both estimators,
+          consistent with a visibility-protection tradeoff: blocking may help prevent AI extraction, but
+          it can also reduce discoverability and referral flows. The widening confidence bands farther from
+          treatment suggest the estimate is less precise at longer horizons, so interpretation should focus
+          on the direction and short- to medium-run movement rather than exact endpoint magnitudes.
+        </p>
+      </section>
+
+      <section aria-labelledby="three-d-example">
+        <h2 id="three-d-example">3D Slideshow Example (Visual Placeholder)</h2>
+        <div class="slideshow-wrap">
+          <div class="slideshow-controls">
+            <button class="slideshow-btn" type="button" id="prev-slide">Prev</button>
+            <button class="slideshow-btn" type="button" id="next-slide">Next</button>
+          </div>
+          <div class="slideshow-3d" id="slideshow-3d" aria-live="polite">
+            <div class="slide slide-one" data-slide-title="Health Demand Dynamics">
+              Health Demand Dynamics
+              <span class="slide-label">Episodic visits and gradual substitution patterns</span>
+            </div>
+            <div class="slide slide-two" data-slide-title="Website Response Margin">
+              Website Response Margin
+              <span class="slide-label">Blocking choices, visibility, and traffic outcomes</span>
+            </div>
+            <div class="slide slide-three" data-slide-title="Welfare Tradeoff">
+              Welfare Tradeoff
+              <span class="slide-label">Faster access vs. incentives for verified content</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="interactive-element">
+        <h2 id="interactive-element">Interactive Snapshot</h2>
+        <details>
+          <summary>Click to view preliminary findings</summary>
+          <p>
+            Preliminary evidence suggests substitution from health websites to LLMs is limited and gradual,
+            only a small share of sites block AI crawlers, and many websites appear to shift toward more
+            visual and interactive content over time.
+          </p>
+        </details>
+        <p>
+          The interactive block functions as a compact, audience-friendly summary device: it keeps the
+          main narrative clean while letting readers reveal interpretation on demand. For a capstone page,
+          this interaction can later be extended to show subgroup results, robustness notes, or method
+          caveats without overwhelming the top-level presentation.
+        </p>
+      </section>
+
+      <footer>
+        Capstone draft webpage for ECON 30 (Spring 2026).
+      </footer>
+    </main>
+  </div>
+  <script>
+    (function () {
+      const deck = document.getElementById("slideshow-3d");
+      const prevBtn = document.getElementById("prev-slide");
+      const nextBtn = document.getElementById("next-slide");
+      const slides = deck ? Array.from(deck.querySelectorAll(".slide")) : [];
+      let current = 0;
+
+      function wrapIndex(value) {
+        const n = slides.length;
+        return (value + n) % n;
+      }
+
+      function applyPositions() {
+        slides.forEach((slide, index) => {
+          slide.classList.remove("slide-pos-center", "slide-pos-left", "slide-pos-right", "slide-pos-hidden");
+          if (index === current) {
+            slide.classList.add("slide-pos-center");
+          } else if (index === wrapIndex(current - 1)) {
+            slide.classList.add("slide-pos-left");
+          } else if (index === wrapIndex(current + 1)) {
+            slide.classList.add("slide-pos-right");
+          } else {
+            slide.classList.add("slide-pos-hidden");
+          }
+        });
+      }
+
+      if (deck && prevBtn && nextBtn && slides.length > 0) {
+        prevBtn.addEventListener("click", function () {
+          current = wrapIndex(current - 1);
+          applyPositions();
+        });
+
+        nextBtn.addEventListener("click", function () {
+          current = wrapIndex(current + 1);
+          applyPositions();
+        });
+
+        applyPositions();
+      }
+
+      // Resolve image path robustly across local folders/repo layouts.
+      const eventStudyImage = document.getElementById("event-study-image");
+      const imageCandidates = [
+        "assets/blocking-event-study.png",
+        "assets/blocking-event-study.PNG",
+        "./assets/blocking-event-study.png",
+        "./assets/blocking-event-study.PNG",
+        "blocking-event-study.png",
+        "./blocking-event-study.png",
+        "../assets/blocking-event-study.png",
+        "../assets/blocking-event-study.PNG"
+      ];
+
+      function resolveImagePath(candidates, onResolved, onFailed) {
+        let idx = 0;
+        function tryNext() {
+          if (idx >= candidates.length) {
+            onFailed();
+            return;
+          }
+          const candidate = candidates[idx++];
+          const probe = new Image();
+          probe.onload = function () {
+            onResolved(candidate);
+          };
+          probe.onerror = tryNext;
+          probe.src = candidate + "?v=1";
+        }
+        tryNext();
+      }
+
+      if (eventStudyImage) {
+        resolveImagePath(
+          imageCandidates,
+          function (resolvedPath) {
+            eventStudyImage.src = resolvedPath;
+          },
+          function () {
+            // Keep current src/alt; browser will still show fallback text.
+          }
+        );
+      }
+    })();
+  </script>
+</body>
+</html>
