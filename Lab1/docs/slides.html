@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Econ 30 - Lab 1: Introduction to Cursor</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: #1a1a1a;
+    overflow: hidden;
+    height: 100vh;
+  }
+  .slide {
+    display: none;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1100px; max-width: 95vw;
+    min-height: 680px; max-height: 90vh;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    padding: 50px 60px;
+    overflow-y: auto;
+  }
+  .slide.active { display: flex; align-items: flex-start; }
+  .slide-inner { width: 100%; }
+
+  .slide.title {
+    align-items: center; justify-content: center; text-align: center;
+  }
+  .slide.title h1 {
+    font-size: 2.8em; border-bottom: none; color: #0A2463;
+  }
+  .slide.title h2 {
+    font-weight: normal; color: #666; font-size: 1.4em; margin-top: 12px;
+  }
+  .slide.title h3 {
+    font-weight: normal; color: #888; font-size: 1.15em; margin-top: 8px;
+    border-bottom: none;
+  }
+  .slide.title p { color: #888; font-size: 1.15em; margin-top: 10px; }
+
+  .slide.section-break {
+    align-items: center; justify-content: center; text-align: center;
+    background: #f8f8f8;
+  }
+  .slide.section-break h1 {
+    font-size: 2.4em; border-bottom: none; color: #0A2463;
+  }
+  .slide.section-break h2 {
+    font-weight: normal; color: #8C1515; font-size: 1.3em; margin-top: 10px;
+  }
+
+  h1 {
+    font-size: 1.9em; color: #0A2463;
+    border-bottom: 3px solid #8C1515;
+    padding-bottom: 10px; margin-bottom: 22px;
+  }
+  h2 { font-size: 1.35em; color: #1B6B3A; margin: 20px 0 12px; }
+  h3 { font-size: 1.15em; color: #1B6B3A; margin: 16px 0 10px; }
+  p { font-size: 1.1em; line-height: 1.65; margin: 10px 0; color: #333; }
+  ul, ol { margin: 10px 0 10px 28px; }
+  li { font-size: 1.08em; line-height: 1.7; color: #333; margin: 5px 0; }
+  blockquote {
+    border-left: 4px solid #8C1515; padding: 14px 22px;
+    margin: 16px 0; color: #555; font-style: italic;
+    background: #faf6f6; border-radius: 0 4px 4px 0;
+    font-size: 1.1em;
+  }
+  table {
+    border-collapse: collapse; margin: 16px 0; width: 100%;
+    font-size: 1em;
+  }
+  th, td { border: 1px solid #ddd; padding: 12px 16px; text-align: left; }
+  th { background: #0A2463; font-weight: 600; color: #fff; }
+  tr:nth-child(even) td { background: #f5f8ff; }
+  code {
+    background: #e8f5e9; border-radius: 4px;
+    padding: 2px 7px; font-size: 0.92em;
+    font-family: 'Cascadia Code', 'Consolas', monospace;
+    color: #1B6B3A;
+  }
+  pre {
+    background: #1e1e2e; border-radius: 6px;
+    padding: 18px 22px; margin: 14px 0; overflow-x: auto;
+  }
+  pre code {
+    background: none; color: #e6e6e6; padding: 0;
+    font-size: 0.92em; line-height: 1.6;
+  }
+  strong { color: #0A2463; }
+  .navy { color: #0A2463; }
+  .green { color: #1B6B3A; }
+  .red { color: #8C1515; }
+
+  .slide.spacious p { margin: 14px 0; }
+  .slide.spacious li { margin: 7px 0; }
+  .slide.spacious h3 { margin: 22px 0 10px; }
+
+  .slide.large-text p { font-size: 1.25em; line-height: 1.7; }
+  .slide.large-text li { font-size: 1.2em; line-height: 1.8; margin: 8px 0; }
+  .slide.large-text ul, .slide.large-text ol { margin: 14px 0 14px 32px; }
+  .slide.large-text h2 { font-size: 1.5em; }
+
+  .slide-img {
+    display: block; max-width: 100%; height: auto;
+    border-radius: 6px; margin: 14px auto;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+
+  .workflow-box {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; margin: 18px 0; font-size: 1.1em; flex-wrap: wrap;
+  }
+  .workflow-step {
+    background: #f0f4ff; border: 2px solid #0A2463; border-radius: 8px;
+    padding: 12px 20px; text-align: center; font-weight: 600; color: #0A2463;
+  }
+  .workflow-arrow { font-size: 1.5em; color: #8C1515; }
+
+  .timer-box {
+    background: #fff3e0; border: 2px solid #e65100; border-radius: 10px;
+    padding: 16px 24px; text-align: center; margin: 20px 0;
+    font-size: 1.3em; font-weight: bold; color: #e65100;
+    cursor: pointer; user-select: none; transition: background 0.2s;
+  }
+  .timer-box:hover { background: #ffe0b2; }
+  .timer-box.running { background: #ffccbc; border-color: #c62828; color: #c62828; }
+  .timer-box.done { background: #c8e6c9; border-color: #2e7d32; color: #2e7d32; }
+
+  .two-col { display: flex; gap: 30px; margin: 10px 0; }
+  .two-col > div { flex: 1; }
+
+  .page-number {
+    position: absolute; bottom: 18px; right: 28px;
+    font-size: 0.85em; color: #aaa;
+  }
+  .nav {
+    position: fixed; bottom: 20px; right: 30px;
+    display: flex; gap: 8px; z-index: 100;
+  }
+  .nav button {
+    background: rgba(0,0,0,0.5); color: #fff; border: none;
+    border-radius: 6px; padding: 10px 18px; cursor: pointer;
+    font-size: 0.9em; transition: background 0.2s;
+  }
+  .nav button:hover { background: rgba(0,0,0,0.7); }
+  .counter {
+    position: fixed; bottom: 24px; left: 30px;
+    color: rgba(255,255,255,0.5); font-size: 0.85em; z-index: 100;
+  }
+  .footer {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.35); font-size: 0.75em; z-index: 100;
+  }
+
+  @page { size: 10in 5.625in; margin: 0; }
+
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body {
+      background: #fff;
+      overflow: visible;
+      height: auto;
+      width: 10in;
+    }
+    .slide {
+      display: flex !important;
+      position: relative !important;
+      top: auto !important; left: auto !important;
+      transform: none !important;
+      width: 10in !important; max-width: 10in !important;
+      height: 5.625in !important;
+      min-height: 5.625in !important; max-height: 5.625in !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      page-break-after: always;
+      break-after: page;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      padding: 36px 48px;
+      margin: 0;
+      overflow: hidden;
+    }
+    .slide:last-of-type {
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+    .nav, .counter, .footer { display: none !important; }
+    .page-number { position: absolute; bottom: 14px; right: 24px; }
+    .timer-box { border: 2px solid #e65100; }
+    pre { background: #1e1e2e !important; }
+    pre code { color: #e6e6e6 !important; }
+    th { background: #0A2463 !important; color: #fff !important; }
+    tr:nth-child(even) td { background: #f5f8ff !important; }
+    .slide.section-break { background: #f8f8f8 !important; }
+    .slide.title {
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center !important;
+    }
+    .slide.title h1 {
+      font-size: 2.8em !important;
+      border-bottom: none !important;
+      padding-bottom: 0 !important;
+      margin-bottom: 0.3em !important;
+    }
+    .slide.title h2 { font-weight: normal !important; color: #666 !important; font-size: 1.4em !important; margin-top: 12px !important; }
+    .slide.title h3 { font-weight: normal !important; color: #888 !important; font-size: 1.15em !important; margin-top: 8px !important; border-bottom: none !important; }
+    .slide.title p { color: #888 !important; font-size: 1.15em !important; margin-top: 10px !important; }
+    .slide img { max-height: 195px !important; }
+    .workflow-step { background: #f0f4ff !important; }
+    code { background: #e8f5e9 !important; }
+    blockquote { background: #faf6f6 !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide title active" data-index="0">
+<div class="slide-inner">
+<h1>Introduction to Cursor</h1>
+<h2>Econ 30 &middot; Lab 1</h2>
+<h3>Samira Gholami</h3>
+<p>Spring 2026</p>
+</div>
+</div>
+
+<!-- Slide 2: Today's Section -->
+<div class="slide large-text" data-index="1">
+<div class="slide-inner">
+<h1>Today's Section</h1>
+<h2>Introductions</h2>
+<ul>
+<li>Your <strong>name</strong></li>
+<li>Your <strong>major</strong></li>
+<li>Your <strong>year</strong></li>
+<li>One <span class="green"><strong>research question</strong></span> you hope to work on</li>
+</ul>
+<h2>What We Will Build Today</h2>
+<p>You will work on one of your ideas. By the end of this session you will have:</p>
+<ol>
+<li>A <span class="green"><strong>project folder structure</strong></span></li>
+<li>A <span class="green"><strong>synthetic dataset</strong></span> (if it applies to your project)</li>
+<li>Related <span class="green"><strong>figures and tables</strong></span></li>
+<li>A written <span class="green"><strong>research memo</strong></span></li>
+</ol>
+</div>
+<div class="page-number">2</div>
+</div>
+
+<!-- Slide 3: Part 1 Logistics -->
+<div class="slide spacious" data-index="2">
+<div class="slide-inner">
+<h1>Part 1: Logistics</h1>
+
+<h3>About Lab Sessions</h3>
+<ul>
+<li>These sessions are opportunities to learn tools and make progress on your projects</li>
+<li>Consider them a focused hour on your project. I'll help you figure it out</li>
+<li>Please bring your laptops and be ready to engage</li>
+</ul>
+
+<h3>Getting Help</h3>
+<ul>
+<li>I'm here to help you push on your project, along with Lukas</li>
+<li>If you feel stuck or unsure how to proceed, always feel free to email me</li>
+<li>Issues on Canvas (submissions, peer reviews): also feel free to email me</li>
+</ul>
+</div>
+<div class="page-number">3</div>
+</div>
+
+<!-- Slide 4: Cursor home screen -->
+<div class="slide" data-index="3">
+<div class="slide-inner">
+<h1>Part 2: Cursor</h1>
+<h2>Start from the home screen</h2>
+<img src="../figures/cursor_home_screen.png" alt="Cursor home screen" class="slide-img" style="max-height: 360px;">
+<p>When Cursor opens, click <span class="navy"><strong>Open project</strong></span> and choose your lab folder.</p>
+</div>
+<div class="page-number">4</div>
+</div>
+
+<!-- Slide 5: Cursor Environment (agent workspace) -->
+<div class="slide" data-index="4">
+<div class="slide-inner">
+<h1>The Cursor Environment</h1>
+<img src="../figures/cursor_agent_screen.png" alt="Cursor agent workspace" class="slide-img" style="max-height: 320px;">
+<p><span class="navy"><strong>Left:</strong></span> Agent/history sidebar and Marketplace access.</p>
+<p><span class="navy"><strong>Center:</strong></span> Main editor + chat draft area where you type prompts.</p>
+<p><span class="navy"><strong>Top of composer:</strong></span> mode selector (Ask/Plan/Agent) and model picker.</p>
+</div>
+<div class="page-number">5</div>
+</div>
+
+<!-- Slide 6: Three Modes -->
+<div class="slide" data-index="5">
+<div class="slide-inner">
+<h1>Three Modes</h1>
+<table>
+<thead><tr><th>Mode</th><th>What It Does</th><th>When to Use It</th></tr></thead>
+<tbody>
+<tr><td><span class="navy"><strong>Ask</strong></span></td><td>Read-only Q&amp;A</td><td>"What does this function do?"</td></tr>
+<tr><td><span class="navy"><strong>Plan</strong></span></td><td>AI proposes a plan; you review first</td><td>"How should I structure this project?"</td></tr>
+<tr><td><span class="navy"><strong>Agent</strong></span></td><td>AI reads, writes, and runs code</td><td>"Build me a scatter plot"</td></tr>
+</tbody>
+</table>
+<p>Think of it as a spectrum:</p>
+<p><span class="navy"><strong>Ask</strong></span> = just talking &nbsp;&middot;&nbsp; <span class="navy"><strong>Plan</strong></span> = thinking together &nbsp;&middot;&nbsp; <span class="navy"><strong>Agent</strong></span> = doing</p>
+<p>To learn about models and compare their capabilities, use <a href="https://arena.ai/" target="_blank" rel="noopener noreferrer">arena.ai</a>.</p>
+</div>
+<div class="page-number">6</div>
+</div>
+
+<!-- Slide 7: Model Landscape -->
+<div class="slide" data-index="6">
+<div class="slide-inner">
+<h1>Choosing the Right Model</h1>
+<p>Models are a tradeoff between <span class="navy"><strong>thinking power</strong></span>, <span class="green"><strong>speed</strong></span>, and <span class="red"><strong>credit cost</strong></span>.</p>
+<table style="font-size: 0.92em;">
+<thead><tr><th>Model</th><th>When to Use</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td><strong>Opus (Claude 4.6)</strong></td><td>Complex planning, tough debugging</td><td>Best reasoning but very expensive; burns credits quickly</td></tr>
+<tr><td><strong>GPT-5.4</strong></td><td>Balanced tasks, coding + thinking</td><td>Strong all-around compromise</td></tr>
+<tr><td><strong>Sonnet (Claude 4.6)</strong></td><td>Fast coding, iteration</td><td>Great for execution at lower cost</td></tr>
+<tr><td><strong>Codex 5.3</strong></td><td>Writing code, autocomplete</td><td>Optimized for coding throughput</td></tr>
+<tr><td><strong>Auto / Cursor models</strong></td><td>Daily agent work, easy tasks</td><td>Very cheap (often effectively free) and credit-friendly</td></tr>
+</tbody>
+</table>
+<p><strong>Rule of thumb:</strong> use <span class="green"><strong>cheap models in Agent mode</strong></span> for easy execution tasks (Composer/Cursor models), and use <span class="navy"><strong>advanced models in Plan mode</strong></span> for complex reasoning (Opus, GPT-5.4).</p>
+<p><span class="green"><strong>Key insight:</strong></span> do not stick to one model. Switching strategically is crucial for both quality and credits.</p>
+</div>
+<div class="page-number">7</div>
+</div>
+
+<!-- Slide 8: Model Workflow -->
+<div class="slide" data-index="7">
+<div class="slide-inner">
+<h1>How to Use Models: The Workflow</h1>
+<div class="workflow-box">
+  <div class="workflow-step">Plan<br><small style="color:#8C1515">Opus / GPT-5.4</small></div>
+  <div class="workflow-arrow">&rarr;</div>
+  <div class="workflow-step">Execute<br><small style="color:#1B6B3A">Sonnet / Codex</small></div>
+  <div class="workflow-arrow">&rarr;</div>
+  <div class="workflow-step">Refine<br><small style="color:#8C1515">Opus / GPT-5.4</small></div>
+</div>
+
+<div class="two-col">
+<div>
+<h3>Use strong models for:</h3>
+<ul>
+<li>Planning projects</li>
+<li>Understanding errors</li>
+<li>Designing analysis</li>
+<li>Interpreting results</li>
+</ul>
+</div>
+<div>
+<h3>Use fast models for:</h3>
+<ul>
+<li>Writing code</li>
+<li>Editing files</li>
+<li>Quick fixes</li>
+<li>Repetitive tasks</li>
+</ul>
+</div>
+</div>
+
+<p><strong>Example:</strong> Opus &rarr; "Help me design a dataset and research question" &rarr; Sonnet &rarr; "Write Python to simulate data" &rarr; Opus &rarr; "Interpret results"</p>
+<p><span class="green"><strong>Key insight:</strong></span> switch models often. Good workflow = not sticking to one model.</p>
+</div>
+<div class="page-number">8</div>
+</div>
+
+<!-- Slide 9: Extensions -->
+<div class="slide" data-index="8">
+<div class="slide-inner">
+<h1>Extensions</h1>
+<p>To view extensions: <span class="navy"><strong>View &rarr; Extensions</strong></span> (<code>Ctrl+Shift+X</code>).</p>
+<p>Two extensions I recommend:</p>
+<ol>
+<li><strong>Claude Code</strong></li>
+<li><strong>Codex</strong></li>
+</ol>
+<h3>Why extensions are useful</h3>
+<ul>
+<li>They add capabilities (language support, formatting, notebooks, Git tools)</li>
+<li>They improve quality-of-life (better autocomplete, linting, previews)</li>
+<li>They make Cursor feel like a full research environment, not just a chat tool</li>
+</ul>
+</div>
+<div class="page-number">9</div>
+</div>
+
+<!-- Slide 10: Project Scaffolding section break -->
+<div class="slide section-break" data-index="9">
+<div class="slide-inner">
+<h1>Setting Up Your Workspace</h1>
+</div>
+<div class="page-number">10</div>
+</div>
+
+<!-- Slide 11: Your First Prompt -->
+<div class="slide" data-index="10">
+<div class="slide-inner">
+<h1>Your First Prompt</h1>
+<p>Switch to <span class="navy"><strong>Agent</strong></span> mode. Ask the agent to create a project structure for you.</p>
+<p>You want the following folders and files (adjust to your project):</p>
+<table>
+<thead><tr><th>Folder / File</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>data/</code></td><td>Datasets (raw, cleaned, simulated)</td></tr>
+<tr><td><code>code/</code></td><td>Python scripts for analysis</td></tr>
+<tr><td><code>figures/</code></td><td>Plots, charts, tables</td></tr>
+<tr><td><code>output/</code></td><td>Regression results, logs</td></tr>
+<tr><td><code>memo.md</code></td><td>Your research write-up</td></tr>
+<tr><td><code>README.md</code></td><td>Project description</td></tr>
+</tbody>
+</table>
+</div>
+<div class="page-number">11</div>
+</div>
+
+<!-- Slide 12: Designing the Analysis section break -->
+<div class="slide section-break" data-index="11">
+<div class="slide-inner">
+<h1>Designing the Analysis</h1>
+<h2>Using Plan Mode</h2>
+</div>
+<div class="page-number">12</div>
+</div>
+
+<!-- Slide 13: Switch to Plan Mode -->
+<div class="slide" data-index="12">
+<div class="slide-inner">
+<h1>Switch to Plan Mode</h1>
+<p>Change the mode toggle from <span class="navy"><strong>Agent</strong></span> to <span class="navy"><strong>Plan</strong></span>.</p>
+<p>In Plan mode, the AI will <strong>propose a plan</strong> but will <strong>not change any files</strong>.</p>
+<p>This is where you think before you code.</p>
+<p>This is also where you would use a <strong>strong model</strong> (Opus / GPT-5.4), since planning requires deep reasoning.</p>
+</div>
+<div class="page-number">13</div>
+</div>
+
+<!-- Slide 14: The Planning Prompt -->
+<div class="slide" data-index="13">
+<div class="slide-inner">
+<h1>Write Your Plan</h1>
+<p>In <span class="navy"><strong>Plan</strong></span> mode, describe the analysis you want to run. Here is an example:</p>
+<pre><code>I want to study how technological progress affects
+employment across industries. Plan a Python analysis that:
+1. Generates synthetic panel data for 500 firms over 10
+   years with: R&D spending, automation adoption,
+   employment, and industry sector
+2. Produces summary statistics by sector
+3. Runs a fixed-effects regression of employment on
+   automation adoption, controlling for R&D and sector
+4. Creates a scatter plot of automation vs. employment
+   and a bar chart of effects by industry
+Save data to data/, scripts to code/, figures to figures/</code></pre>
+<p><span class="green"><strong>Now it's your turn.</strong></span> Write a plan for <strong>your own project</strong>. Describe your research question, the data you need, and what analysis you want to run.</p>
+<div class="timer-box" id="timer-5" onclick="startTimer('timer-5', 300)">Click to start: 5:00</div>
+</div>
+<div class="page-number">14</div>
+</div>
+
+<!-- Slide 15: Read the Plan -->
+<div class="slide" data-index="14">
+<div class="slide-inner">
+<h1>Read the Plan</h1>
+<p>The AI will produce a structured plan. Take a moment to:</p>
+<ul>
+<li><strong>Read it carefully.</strong> Does the approach make sense?</li>
+<li><strong>Ask follow-up questions</strong> in chat (still in Plan mode)</li>
+<li><strong>Discuss with your neighbor.</strong> What would you change?</li>
+</ul>
+<p>Notice: <strong>no files were created or changed.</strong> Plan mode is read-only.</p>
+<p>This mirrors real research workflow: <span class="green"><strong>plan first, code second.</strong></span></p>
+<div class="timer-box" id="timer-7" onclick="startTimer('timer-7', 480)">Click to start: 8:00</div>
+</div>
+<div class="page-number">15</div>
+</div>
+
+<!-- Slide 16: Building & Running Code section break -->
+<div class="slide section-break" data-index="15">
+<div class="slide-inner">
+<h1>Building &amp; Running Code</h1>
+</div>
+<div class="page-number">16</div>
+</div>
+
+<!-- Slide 17: Execute the Plan -->
+<div class="slide" data-index="16">
+<div class="slide-inner">
+<h1>Execute the Plan</h1>
+<p>Switch back to <span class="navy"><strong>Agent</strong></span> mode. Type:</p>
+<pre><code>Go ahead and implement the plan.
+Write clean, well-structured Python code.</code></pre>
+<p>Cursor will:</p>
+<ul>
+<li>Create Python scripts in <code>code/</code></li>
+<li>Generate your dataset in <code>data/</code></li>
+<li>Save figures to <code>figures/</code></li>
+<li>Save regression results to <code>output/</code></li>
+</ul>
+<p>Watch it work!</p>
+</div>
+<div class="page-number">17</div>
+</div>
+
+<!-- Slide 18: Exercise A -->
+<div class="slide" data-index="17">
+<div class="slide-inner">
+<h1>Exercise A: Inline Editing</h1>
+<p>Try <code>Ctrl+K</code> (inline edit):</p>
+<ol>
+<li>Open a generated <code>.py</code> file</li>
+<li><strong>Select</strong> a few lines of code (e.g., plotting code)</li>
+<li>Press <code>Ctrl+K</code></li>
+<li>Type: <code>Add a title and axis labels, use a colorblind-friendly palette</code></li>
+<li>Press Enter</li>
+</ol>
+<p>This is how you make <span class="green"><strong>quick, targeted changes</strong></span> without going to the chat panel.</p>
+</div>
+<div class="page-number">18</div>
+</div>
+
+<!-- Slide 19: Exercise B -->
+<div class="slide" data-index="18">
+<div class="slide-inner">
+<h1>Exercise B: Ask Mode for Learning</h1>
+<p>Switch to <span class="navy"><strong>Ask</strong></span> mode. Highlight the regression code and type:</p>
+<pre><code>Explain what this regression is doing
+and interpret the coefficients.</code></pre>
+<p>The AI will explain the code <strong>without changing anything</strong>.</p>
+<p>This is how you use Cursor to <span class="green"><strong>learn</strong></span>, not just produce.</p>
+</div>
+<div class="page-number">19</div>
+</div>
+
+<!-- Slide 20: Checkpoint -->
+<div class="slide" data-index="19">
+<div class="slide-inner">
+<h1>Checkpoint</h1>
+<p>You should now have:</p>
+<ul>
+<li>A dataset in <code>data/</code></li>
+<li>Figures in <code>figures/</code></li>
+<li>Regression output in <code>output/</code></li>
+<li>Python scripts in <code>code/</code></li>
+</ul>
+<p>Raise your hand if anything is missing.</p>
+</div>
+<div class="page-number">20</div>
+</div>
+
+<!-- Slide 21: Writing in Cursor section break -->
+<div class="slide section-break" data-index="20">
+<div class="slide-inner">
+<h1>Writing in Cursor</h1>
+</div>
+<div class="page-number">21</div>
+</div>
+
+<!-- Slide 22: Write Your Memo -->
+<div class="slide" data-index="21">
+<div class="slide-inner">
+<h1>Write Your Memo</h1>
+<p>Switch to <span class="navy"><strong>Agent</strong></span> mode and write something along the lines of:</p>
+<pre><code>Write a short 1-page research memo in memo.md
+summarizing:
+- The research question
+- The data (describe the dataset)
+- Key findings from the regression
+- Embed the figures from figures/
+Keep it concise and professional.</code></pre>
+<p>Then <strong>open</strong> <code>memo.md</code>, manually edit a sentence, add your name.</p>
+<p>Preview the rendered Markdown: <code>Ctrl+Shift+V</code></p>
+</div>
+<div class="page-number">22</div>
+</div>
+
+<!-- Slide 23: Wrap-Up section break -->
+<div class="slide section-break" data-index="22">
+<div class="slide-inner">
+<h1>Wrap-Up</h1>
+</div>
+<div class="page-number">23</div>
+</div>
+
+<!-- Slide 24: What You Learned Today -->
+<div class="slide" data-index="23">
+<div class="slide-inner">
+<h1>What You Learned Today</h1>
+<table>
+<thead><tr><th>Feature</th><th>How to Access</th><th>When to Use</th></tr></thead>
+<tbody>
+<tr><td><span class="navy"><strong>Ask Mode</strong></span></td><td>Mode toggle</td><td>Understanding, learning</td></tr>
+<tr><td><span class="navy"><strong>Plan Mode</strong></span></td><td>Mode toggle</td><td>Project design, before coding</td></tr>
+<tr><td><span class="navy"><strong>Agent Mode</strong></span></td><td>Mode toggle</td><td>Building, generating, fixing</td></tr>
+<tr><td><span class="green"><strong>Inline Edit</strong></span></td><td><code>Ctrl+K</code></td><td>Quick targeted code changes</td></tr>
+<tr><td><span class="green"><strong>Model Selector</strong></span></td><td>Dropdown in chat</td><td>Match model to task</td></tr>
+<tr><td><span class="green"><strong>Terminal</strong></span></td><td><code>Ctrl+`</code></td><td>Running scripts</td></tr>
+<tr><td><span class="green"><strong>Extensions</strong></span></td><td><code>Ctrl+Shift+X</code></td><td>Tools and language support</td></tr>
+</tbody>
+</table>
+</div>
+<div class="page-number">24</div>
+</div>
+
+<!-- Slide 25: Have a Great Weekend -->
+<div class="slide title" data-index="24">
+<div class="slide-inner">
+<h1>Have a Great Weekend!</h1>
+<h2>Questions? Feel free to reach out.</h2>
+<p style="margin-top: 30px; font-size: 1.2em;"><a href="mailto:samiragl@stanford.edu" style="color: #0A2463; text-decoration: none;">samiragl@stanford.edu</a></p>
+</div>
+</div>
+
+<div class="counter" id="counter">1 / 25</div>
+<div class="footer">Econ 30 &middot; Stanford University &middot; Spring 2026</div>
+<div class="nav">
+  <button onclick="prev()">&#9664; Prev</button>
+  <button onclick="next()">Next &#9654;</button>
+  <button onclick="savePDF()" style="background:rgba(140,21,21,0.7);">Save PDF</button>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+const counter = document.getElementById('counter');
+
+// Show "current/total" on every slide (including title slide).
+document.querySelectorAll('.slide .page-number').forEach((el, i) => {
+  el.textContent = (i + 1) + ' / ' + total;
+});
+
+function show(n) {
+  slides[current].classList.remove('active');
+  current = (n + total) % total;
+  slides[current].classList.add('active');
+  counter.textContent = (current + 1) + ' / ' + total;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  if (e.key === 'Home') { e.preventDefault(); show(0); }
+  if (e.key === 'End') { e.preventDefault(); show(total - 1); }
+});
+
+const timers = {};
+function startTimer(id, seconds) {
+  const el = document.getElementById(id);
+  if (timers[id]) { clearInterval(timers[id]); timers[id] = null; el.classList.remove('running','done'); el.textContent = 'Click to start: ' + fmt(seconds); return; }
+  let remaining = seconds;
+  el.classList.add('running');
+  el.classList.remove('done');
+  el.textContent = fmt(remaining);
+  timers[id] = setInterval(() => {
+    remaining--;
+    if (remaining <= 0) {
+      clearInterval(timers[id]); timers[id] = null;
+      el.classList.remove('running'); el.classList.add('done');
+      el.textContent = "Time's up!";
+    } else {
+      el.textContent = fmt(remaining);
+    }
+  }, 1000);
+}
+function fmt(s) { return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
+
+function savePDF() {
+  var printWin = window.open('', '_blank');
+  var allSlides = document.querySelectorAll('.slide');
+  var slideHTML = '';
+  for (var i = 0; i < allSlides.length; i++) {
+    var extra = allSlides[i].className.replace(/\bactive\b/g, '').replace(/\bslide\b/g, '').trim().replace(/\s+/g, ' ');
+    slideHTML += '<div class="print-slide' + (extra ? ' ' + extra : '') + '">' + allSlides[i].innerHTML + '</div>';
+  }
+  printWin.document.write('<!DOCTYPE html><html><head><title>Econ 30 Slides</title><style>');
+  printWin.document.write('@page { size: 10in 5.625in; margin: 0; }');
+  printWin.document.write('* { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }');
+  printWin.document.write('body { font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; }');
+  printWin.document.write('.print-slide { width: 10in; min-height: 5.625in; height: 5.625in; padding: 32px 44px; page-break-after: always; break-after: page; overflow: hidden; position: relative; background: #fff; display: flex; align-items: flex-start; }');
+  printWin.document.write('.print-slide.title { align-items: center; justify-content: center; text-align: center; }');
+  printWin.document.write('.print-slide.title h1 { font-size: 2.8em; color: #0A2463; border-bottom: none; padding-bottom: 0; margin-bottom: 0.3em; }');
+  printWin.document.write('.print-slide.title h2 { font-weight: normal; color: #666; font-size: 1.4em; margin-top: 12px; }');
+  printWin.document.write('.print-slide.title h3 { font-weight: normal; color: #888; font-size: 1.15em; margin-top: 8px; border-bottom: none; }');
+  printWin.document.write('.print-slide.title p { color: #888; font-size: 1.15em; margin-top: 10px; }');
+  printWin.document.write('.print-slide.section-break { align-items: center; justify-content: center; text-align: center; background: #f8f8f8; }');
+  printWin.document.write('.print-slide.section-break h1 { font-size: 2.4em; border-bottom: none; color: #0A2463; padding-bottom: 0; margin-bottom: 0.25em; }');
+  printWin.document.write('.print-slide.section-break h2 { font-weight: normal; color: #8C1515; font-size: 1.3em; margin-top: 10px; }');
+  printWin.document.write('.print-slide:last-child { page-break-after: avoid; }');
+  printWin.document.write('h1 { font-size: 1.9em; color: #0A2463; border-bottom: 3px solid #8C1515; padding-bottom: 10px; margin-bottom: 22px; }');
+  printWin.document.write('.print-slide.title h1, .print-slide.section-break h1 { border-bottom: none; padding-bottom: 0; }');
+  printWin.document.write('h2 { font-size: 1.35em; color: #1B6B3A; margin: 20px 0 12px; }');
+  printWin.document.write('h3 { font-size: 1.15em; color: #1B6B3A; margin: 16px 0 10px; }');
+  printWin.document.write('p { font-size: 1.1em; line-height: 1.65; margin: 10px 0; color: #333; }');
+  printWin.document.write('ul, ol { margin: 10px 0 10px 28px; }');
+  printWin.document.write('li { font-size: 1.08em; line-height: 1.7; color: #333; margin: 5px 0; }');
+  printWin.document.write('table { border-collapse: collapse; margin: 16px 0; width: 100%; font-size: 1em; }');
+  printWin.document.write('th, td { border: 1px solid #ddd; padding: 12px 16px; text-align: left; }');
+  printWin.document.write('th { background: #0A2463; font-weight: 600; color: #fff; }');
+  printWin.document.write('tr:nth-child(even) td { background: #f5f8ff; }');
+  printWin.document.write('strong { color: #0A2463; }');
+  printWin.document.write('.navy { color: #0A2463; } .green { color: #1B6B3A; } .red { color: #8C1515; }');
+  printWin.document.write('code { background: #e8f5e9; border-radius: 4px; padding: 2px 7px; font-size: 0.92em; font-family: "Cascadia Code", Consolas, monospace; color: #1B6B3A; }');
+  printWin.document.write('pre { background: #1e1e2e; border-radius: 6px; padding: 18px 22px; margin: 14px 0; }');
+  printWin.document.write('pre code { background: none; color: #e6e6e6; padding: 0; font-size: 0.92em; line-height: 1.6; }');
+  printWin.document.write('blockquote { border-left: 4px solid #8C1515; padding: 14px 22px; margin: 16px 0; color: #555; font-style: italic; background: #faf6f6; border-radius: 0 4px 4px 0; font-size: 1.1em; }');
+  printWin.document.write('.slide-inner { width: 100%; }');
+  printWin.document.write('.slide-img, .print-slide img { display: block; max-width: 100%; height: auto; border-radius: 6px; margin: 10px auto; box-shadow: 0 4px 16px rgba(0,0,0,0.15); max-height: 195px !important; object-fit: contain; }');
+  printWin.document.write('.two-col { display: flex; gap: 30px; margin: 10px 0; } .two-col > div { flex: 1; }');
+  printWin.document.write('.workflow-box { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 18px 0; font-size: 1.1em; flex-wrap: wrap; }');
+  printWin.document.write('.workflow-step { background: #f0f4ff; border: 2px solid #0A2463; border-radius: 8px; padding: 12px 20px; text-align: center; font-weight: 600; color: #0A2463; }');
+  printWin.document.write('.workflow-arrow { font-size: 1.5em; color: #8C1515; }');
+  printWin.document.write('.timer-box { background: #fff3e0; border: 2px solid #e65100; border-radius: 10px; padding: 16px 24px; text-align: center; margin: 20px 0; font-size: 1.3em; font-weight: bold; color: #e65100; }');
+  printWin.document.write('.page-number { position: absolute; bottom: 14px; right: 24px; font-size: 0.85em; color: #aaa; }');
+  printWin.document.write('@media screen { body { background: #eee; } .print-slide { margin: 20px auto; box-shadow: 0 4px 20px rgba(0,0,0,0.2); border-radius: 4px; } }');
+  printWin.document.write('</style></head><body>');
+  printWin.document.write(slideHTML);
+  printWin.document.write('</body></html>');
+  printWin.document.close();
+  printWin.focus();
+  setTimeout(function() { printWin.print(); }, 500);
+}
+</script>
+
+</body>
+</html>
